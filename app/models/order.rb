@@ -1,13 +1,14 @@
 class Order < ApplicationRecord
   before_create -> { generate_number(hash_size) }
 
-  belongs_to :user
+  belongs_to :user, optional: true
 
   has_many :order_items
   has_many :products, through: :order_items
   has_many :payments
 
   validates :number, uniqueness: true
+  validates :state, presence: true
 
   def generate_number(size)
     self.number ||= loop do
@@ -43,4 +44,6 @@ class Order < ApplicationRecord
     end
     update_attribute(:total, sum)
   end
+
+
 end
